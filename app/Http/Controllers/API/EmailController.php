@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use App\Models\EmailApproval;
 
 class EmailController extends BaseController
 {
@@ -91,7 +93,6 @@ class EmailController extends BaseController
             'message' => 'required',
             'topic_name' => 'required',
             'subject' => 'required',
-
         ]);
    
         if($validator->fails()){
@@ -154,6 +155,79 @@ class EmailController extends BaseController
         }     
     }
 
+
+public function saveEmail(Request $request)
+{
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'contact_list_name' => 'required',
+            'message' => 'required',
+            'topic_name' => 'required',
+            'subject' => 'required',
+        ]);
+   
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+         $data = DB::table('email_approvals')->insert([
+            ...$request->all(),
+            "status" => "pending"
+         ]);
+
+        return $this->sendResponse($data, 'Email created successfully.');
+}
+
+    public function updateEmail(Request $request, $id)
+    {
+        $email = EmailApproval::find($id);
+        if (is_null($email)) {
+            session()->flash('error', "The page is not found !");
+            return redirect()->route('admin.emailApprovals.index');
+        }
+
+        $request->validate([
+            'subject'  => 'required|max:100',
+            'message'  => 'required|max:100'
+        ]);
+
+        try {
+            $email->subject = $request->get("subject");
+            $email->message = $request->get("message");
+            $email->save();
+
+            session()->flash('success', 'Blog has been updated successfully !!');
+            return $this->sendResponse($email, 'Email created successfully.');
+        } catch (\Exception $e) {
+            session()->flash('sticky_error', $e->getMessage());
+            return back();
+        }
+    }
+
+
+    public function updateEmailStatus(Request $request, $id)
+    {
+        $email = EmailApproval::find($id);
+        if (is_null($email)) {
+            session()->flash('error', "The page is not found !");
+            return redirect()->route('admin.emailApprovals.index');
+        }
+
+        $request->validate([
+            'status'  => 'required|max:100',
+        ]);
+
+        try {
+            $email->status = $request->get("status");
+            $email->save();
+
+            session()->flash('success', 'Blog has been updated successfully !!');
+            return $this->sendResponse($email, 'Email created successfully.');
+        } catch (\Exception $e) {
+            session()->flash('sticky_error', $e->getMessage());
+            return back();
+        }
+    }
 
    
 }
