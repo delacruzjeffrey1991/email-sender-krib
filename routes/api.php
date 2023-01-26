@@ -25,7 +25,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('send-email', [EmailController::class, 'sendEmail']);
 Route::post('send-email/topic', [EmailController::class, 'sendEmailByTopic']);
-
+Route::post('save-email', [EmailController::class, 'saveEmail']);
+Route::post('update-email/{id}', [EmailController::class, 'updateEmail']);
+Route::post('update-email-status/{id}', [EmailController::class, 'updateEmailStatus']);
 
 Route::post('user-password-validation', [EmailApprovalsController::class, 'validatePassword']);
 
