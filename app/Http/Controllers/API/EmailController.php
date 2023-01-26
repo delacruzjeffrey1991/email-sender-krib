@@ -187,9 +187,15 @@ public function saveEmail(Request $request)
         }
 
         $request->validate([
-            'subject'  => 'required|max:100',
-            'message'  => 'required|max:100'
+            'subject'  => 'required',
+            'message'  => 'required'
         ]);
+        Log::info('jepri');
+        Log::info($request->get("message"));
+        // if($validator->fails()){
+        //     return $this->sendError('Validation Error.', $validator->errors());       
+        // }
+
 
         try {
             $email->subject = $request->get("subject");

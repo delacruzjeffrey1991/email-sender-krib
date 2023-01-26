@@ -17,7 +17,7 @@
                         <th>id</th>
                         <th>Contact List Name</th>
                         <th>Topic Name</th>
-                        <th>Message</th>
+                        <!-- <th>Message</th> -->
                         <th>Subject</th>
                         <th>Status</th>
                         <th width="100">Action</th>
@@ -29,7 +29,7 @@
                           <td>{{$item->id}}</td>
                           <td>{{$item->contact_list_name}}</td>
                           <td>{{$item->topic_name}}</td>
-                          <td>{{$item->message}}</td>
+                          <!-- <td>{{$item->message}}</td> -->
                           <td>{{$item->subject}}</td>
                           <td>{{$item->status}}</td> 
                           <td >

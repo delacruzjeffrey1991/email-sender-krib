@@ -69,7 +69,10 @@
             var id = $("#id-input").val()
             fetch(`{{url('api/update-email')}}/${id}`, {
             method: 'POST',
-                body: urlencoded
+                body: urlencoded,
+                headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+              },
             })
               .then(response => {
                 window.location.href ="{{ route('admin.emailApprovals.index')}}" 
