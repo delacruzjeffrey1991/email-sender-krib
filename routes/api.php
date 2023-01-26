@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\EmailController;
+use App\Http\Controllers\Backend\EmailApprovalsController;
 use App\Http\Controllers\API\ContactController;
 
 /*
@@ -25,6 +26,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('send-email', [EmailController::class, 'sendEmail']);
 Route::post('send-email/topic', [EmailController::class, 'sendEmailByTopic']);
 
+
+Route::post('user-password-validation', [EmailApprovalsController::class, 'validatePassword']);
 
 Route::post('contact-list', [ContactController::class, 'create']);
 Route::post('contact-list/update', [ContactController::class, 'updateContactList']);
