@@ -84,9 +84,10 @@
       </div>
   </div>
 </div>
+</div>
 
 <!-- Modal -->
-<div id="addEmail" class="modal fade" role="dialog"  >
+<div id="addEmail" class="modal fade" role="dialog"  data-backdrop="static" data-keyboard="false" >
   <div class="modal-dialog">
 
     <!-- Modal content-->

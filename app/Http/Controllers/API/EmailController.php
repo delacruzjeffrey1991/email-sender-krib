@@ -8,6 +8,7 @@ use Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\EmailApproval;
+use PhpSpellcheck\Spellchecker\Aspell;
 
 class EmailController extends BaseController
 {
@@ -158,7 +159,25 @@ class EmailController extends BaseController
 
 public function saveEmail(Request $request)
 {
+        $aspell = Aspell::create();
+        $misspellings = $aspell->check('mispell', ['en_US'], ['from_example']);
+        foreach ($misspellings as $misspelling) {
+            $misspelling->getWord(); // 'mispell'
+            $misspelling->getLineNumber(); // '1'
+            $misspelling->getOffset(); // '0'
+            $misspelling->getSuggestions(); // ['misspell', ...]
+            $misspelling->getContext(); // ['from_example']
+        }
         $input = $request->all();
+
+        //convertign message HTML to strings
+        echo(strip_tags($input['message']));
+
+        echo "<pre>";
+        print_r($input);
+        echo "</pre>";
+        exit;
+
         $validator = Validator::make($input, [
             'contact_list_name' => 'required',
             'message' => 'required',
