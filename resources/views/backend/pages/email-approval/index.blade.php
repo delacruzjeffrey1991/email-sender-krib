@@ -156,7 +156,9 @@
             })
               .then(response => response.json())
               .then(result => {
-                window.location.reload()
+                if( result.success) {
+                    window.location.reload()
+                }
               })
               .catch(error => {
                 alert(JSON.stringify(error))

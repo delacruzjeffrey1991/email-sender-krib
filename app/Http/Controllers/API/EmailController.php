@@ -8,7 +8,11 @@ use Validator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\EmailApproval;
-use PhpSpellcheck\Spellchecker\Aspell;
+// use PhpSpellcheck\Spellchecker\Aspell;
+use Mekras\Speller\Aspell\Aspell;
+use Mekras\Speller\Source\StringSource;
+
+
 
 class EmailController extends BaseController
 {
@@ -159,24 +163,7 @@ class EmailController extends BaseController
 
 public function saveEmail(Request $request)
 {
-        $aspell = Aspell::create();
-        $misspellings = $aspell->check('mispell', ['en_US'], ['from_example']);
-        foreach ($misspellings as $misspelling) {
-            $misspelling->getWord(); // 'mispell'
-            $misspelling->getLineNumber(); // '1'
-            $misspelling->getOffset(); // '0'
-            $misspelling->getSuggestions(); // ['misspell', ...]
-            $misspelling->getContext(); // ['from_example']
-        }
         $input = $request->all();
-
-        //convertign message HTML to strings
-        echo(strip_tags($input['message']));
-
-        echo "<pre>";
-        print_r($input);
-        echo "</pre>";
-        exit;
 
         $validator = Validator::make($input, [
             'contact_list_name' => 'required',
@@ -187,6 +174,19 @@ public function saveEmail(Request $request)
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
+        }
+
+        $speller = new Aspell("C:\Program Files (x86)\Aspell\bin\aspell");
+        $source = new StringSource(strip_tags($input['message']));
+        $issues = $speller->checkText($source, ['en']);
+
+        $wordIssues = [];
+        foreach($issues as $issue) {
+            array_push($wordIssues, $issue->word);
+        }
+
+        if(count($wordIssues)){
+            return $this->sendError('Error words.', $wordIssues);
         }
 
          $data = DB::table('email_approvals')->insert([
