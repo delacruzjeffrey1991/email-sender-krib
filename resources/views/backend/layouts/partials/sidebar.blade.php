@@ -14,14 +14,14 @@
                     </span>
                 </li>
 
-                @if ($user->can('dashboard.view'))
+              <!--   @if ($user->can('dashboard.view'))
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.index') }}" aria-expanded="false">
                         <i class="mdi mdi-creation"></i>
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
-                @endcan
+                @endcan -->
 
                 @if ($user->can('admin.view') || $user->can('admin.create') || $user->can('role.view') || $user->can('role.create'))
                 <li class="sidebar-item ">
@@ -69,7 +69,7 @@
                 </li>
                 @endcan
 
-                @if ($user->can('category.view') || $user->can('category.create'))
+               <!--  @if ($user->can('category.view') || $user->can('category.create'))
                 <li class="sidebar-item ">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="mdi mdi-tune"></i>
@@ -221,7 +221,7 @@
                             @endif
                         </ul>
                     </li>
-                @endif
+                @endif -->
 
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.emailApprovals.index') }}" aria-expanded="false">
@@ -236,7 +236,7 @@
                 </li> --}}
 
 
-                <li class="sidebar-item ">
+         <!--        <li class="sidebar-item ">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="mdi mdi-settings"></i>
                         <span class="hide-menu">Settings </span>
@@ -256,7 +256,7 @@
                         </li>
                     </ul>
                 </li>
-
+ -->
                 <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('admin.logout') }}"  onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();" aria-expanded="false">

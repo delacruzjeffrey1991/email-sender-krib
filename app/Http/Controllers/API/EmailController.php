@@ -11,7 +11,7 @@ use App\Models\EmailApproval;
 // use PhpSpellcheck\Spellchecker\Aspell;
 use Mekras\Speller\Aspell\Aspell;
 use Mekras\Speller\Source\StringSource;
-
+use Mekras\Speller\Source\HtmlSource;
 
 
 class EmailController extends BaseController
@@ -176,8 +176,11 @@ public function saveEmail(Request $request)
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $speller = new Aspell("/usr/bin/aspell");
-        $source = new StringSource(strip_tags($input['message']));
+        // $speller = new Aspell("/usr/bin/aspell");
+        $speller = new Aspell("C:\Program Files (x86)\Aspell\bin\aspell");
+
+        $source = new StringSource(strip_tags(html_entity_decode($input['message'])));
+
         $issues = $speller->checkText($source, ['en']);
 
         $wordIssues = [];
@@ -191,6 +194,7 @@ public function saveEmail(Request $request)
 
          $data = DB::table('email_approvals')->insert([
             ...$request->all(),
+            "message" => $source->getAsString(),
             "status" => "pending"
          ]);
 
