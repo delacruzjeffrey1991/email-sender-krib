@@ -177,11 +177,16 @@ public function saveEmail(Request $request)
         }
 
         $speller = new Aspell("/usr/bin/aspell");
+        // $speller = new Aspell("C:\Program Files (x86)\Aspell\bin\aspell");
 
-        $source = new StringSource(strip_tags(html_entity_decode($input['message'])));
+        $text = strip_tags($input['message'],"<style>");
+        $substring = substr($text,strpos($text,"<style"),strpos($text,"</style>")+2);
+        $text = str_replace($substring,"",$text);
+        $text = str_replace(array("\t","\r","\n"),"",$text);
+        $text =  html_entity_decode($text);
 
+        $source = new StringSource($text);
         $issues = $speller->checkText($source, ['en']);
-
         $wordIssues = [];
         foreach($issues as $issue) {
             array_push($wordIssues, $issue->word);
