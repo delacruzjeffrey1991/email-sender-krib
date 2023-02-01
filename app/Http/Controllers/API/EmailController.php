@@ -176,7 +176,7 @@ public function saveEmail(Request $request)
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $speller = new Aspell("C:\Program Files (x86)\Aspell\bin\aspell");
+        $speller = new Aspell("/usr/bin/aspell");
         $source = new StringSource(strip_tags($input['message']));
         $issues = $speller->checkText($source, ['en']);
 
