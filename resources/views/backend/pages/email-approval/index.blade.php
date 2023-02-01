@@ -18,7 +18,7 @@
                         <th>id</th>
                         <th>Contact List Name</th>
                         <th>Topic Name</th>
-                        <th>Message</th>
+                        <!-- <th>Message</th> -->
                         <th>Subject</th>
                         <th>Status</th>
                         <th width="100">Action</th>
@@ -30,7 +30,7 @@
                           <td>{{$item->id}}</td>
                           <td>{{$item->contact_list_name}}</td>
                           <td>{{$item->topic_name}}</td>
-                          <td>{{$item->message}}</td>
+                          <!-- <td>{{$item->message}}</td> -->
                           <td>{{$item->subject}}</td>
                           <td>{{$item->status}}</td> 
                           <td >
@@ -73,7 +73,7 @@
             <div class="form-group">
                 <label class="control-label" for="title">Password<span class="required">*</span></label>
                 <input type="hidden" class="form-control" id="input-tobe-approved" />
-                <input type="text" class="form-control" id="user-password" placeholder="Password" required=""/>
+                <input type="password" class="form-control" id="user-password" placeholder="Password" required=""/>
             </div>
         </div>
       </div>
