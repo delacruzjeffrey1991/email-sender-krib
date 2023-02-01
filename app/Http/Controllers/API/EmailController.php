@@ -176,11 +176,14 @@ public function saveEmail(Request $request)
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
+
+
         $speller = new Aspell("/usr/bin/aspell");
         // $speller = new Aspell("C:\Program Files (x86)\Aspell\bin\aspell");
 
         $text = strip_tags($input['message'],"<style>");
         $substring = substr($text,strpos($text,"<style"),strpos($text,"</style>")+2);
+
         $text = str_replace($substring,"",$text);
         $text = str_replace(array("\t","\r","\n"),"",$text);
         $text =  html_entity_decode($text);
@@ -198,7 +201,6 @@ public function saveEmail(Request $request)
 
          $data = DB::table('email_approvals')->insert([
             ...$request->all(),
-            "message" => $source->getAsString(),
             "status" => "pending"
          ]);
 
