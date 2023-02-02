@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\CacheController;
 use App\Http\Controllers\Backend\LanguagesController;
 use App\Http\Controllers\Backend\SettingsController;
 use App\Http\Controllers\Backend\EmailApprovalsController;
+use App\Http\Controllers\Backend\TopicController;
 
 
 /*
@@ -79,6 +80,11 @@ Route::group(['prefix' => 'email-approvals'], function () {
     Route::get('/', [EmailApprovalsController::class, 'index'])->name('emailApprovals.index');
     Route::get('/edit/{id}', [EmailApprovalsController::class, 'edit'])->name('emailApprovals.edit');
 });
+
+Route::group(['prefix' => 'topic'], function () {
+    Route::get('/', [TopicController::class, 'index'])->name('topic.index');
+});
+
 
 
 /**

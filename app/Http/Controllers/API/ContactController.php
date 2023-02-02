@@ -159,7 +159,6 @@ class ContactController extends BaseController
 
         $validator = Validator::make($input, [
             'contact_list_name' => 'required',
-
         ]);
    
         if($validator->fails()){
@@ -259,7 +258,6 @@ class ContactController extends BaseController
         $validator = Validator::make($input, [
             'contact_list_name' => 'required',
             'email' => 'required',
-
         ]);
    
         if($validator->fails()){
