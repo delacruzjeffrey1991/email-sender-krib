@@ -7,6 +7,7 @@ use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\EmailController;
 use App\Http\Controllers\Backend\EmailApprovalsController;
 use App\Http\Controllers\API\ContactController;
+use App\Http\Controllers\API\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,4 +40,6 @@ Route::post('contact', [ContactController::class, 'createContact']);
 Route::get('contact', [ContactController::class, 'getContact']);
 Route::get('contact/list', [ContactController::class, 'listContact']);
 Route::post('contact/add-contacts-topic', [ContactController::class, 'addContactsTopics']);
+
+Route::post('event', [EventController::class, 'insertData']);
 
