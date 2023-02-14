@@ -15,21 +15,19 @@ class EventController extends BaseController
 
     public function insertData(Request $request)
     {
+
+        $input = $request->all();
+
         $tableName = 'Events';
         $timestamp = time();
         $item = [
             'event_id' => strval($timestamp),
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com'
+           ...$input
         ];
 
         $dynamoDbModel = new Event;
         $result = $dynamoDbModel->putItem($tableName, $item);
 
-        return $result;
+        return $item;
     }
-    
-
-
-   
 }
