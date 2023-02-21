@@ -36,4 +36,13 @@ class Event extends Marshaler
 
         return $this->dynamoDbClient->putItem($params);
     }
+
+
+    public function getItem($tableName)
+    {
+            $scan_response =  $this->dynamoDbClient->scan(array(
+                'TableName' => $tableName 
+            ));
+        return $scan_response;
+    }
 }
