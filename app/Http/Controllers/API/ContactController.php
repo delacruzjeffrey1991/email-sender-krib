@@ -226,8 +226,13 @@ class ContactController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
+
+        echo($request);
+
         
         try{
+            
+            
             foreach ( $request->get('emails') as  $email) {
                 $result = $this->sesV2Client()->createContact([
                     'ContactListName' => $request->get('contact_list_name'), // REQUIRED
@@ -242,6 +247,29 @@ class ContactController extends BaseController
     
                 ]);
             }
+
+
+            $this->sesV2Client()->sendEmail([
+                'ConfigurationSetName' => 'send_EmailListener',
+                'Content' => [
+                    'Simple' => [
+                        'Body' => [
+                            'Text' => [
+                                'Charset' => 'UTF-8',
+                                'Data' => 'Welcome at localFYI.com',
+                            ],
+                        ],
+                        'Subject' => [
+                            'Charset' => 'UTF-8',
+                            'Data' => 'Welcome Email',
+                        ],
+                    ],
+                ],
+                'FromEmailAddress' => 'roy@localfyi.com',
+                'Destination' => [
+                    'ToAddresses' => [$email],
+                ]
+            ]);
 
 
             return $this->sendResponse($request->get('emails'), 'Contact Created');
