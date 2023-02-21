@@ -41,6 +41,8 @@ Route::get('contact', [ContactController::class, 'getContact']);
 Route::get('contact/list', [ContactController::class, 'listContact']);
 Route::post('contact/add-contacts-topic', [ContactController::class, 'addContactsTopics']);
 
+Route::post('subscribe', [RegisterController::class, 'registerNewreferral']);
+
 Route::get('event-list', [EventController::class, 'getEvents']);
 Route::post('event', [EventController::class, 'insertData']);
 
