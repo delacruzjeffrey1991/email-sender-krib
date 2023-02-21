@@ -91,42 +91,61 @@ class RegisterController extends BaseController
         */
 
         $dynamoDbModel = new Register;
-
-
         $TableName = 'Users';
         $result = $dynamoDbModel->scan($TableName);
 
         $userData = $result -> get('Items');
 
-        // for($x = 0; $x < count($userData); $x++){
-        //  $email = $userData[$x]['email']['S'];
-        //  if($email == $request->get('email')){
-        //     return $this->sendError('User already exist'); 
-        //  }
-        // }
-
-
-        //generate the referral id
-        $uuid = Str::uuid()->toString(); 
-
-        //save this new user
-        $param =  array(
-            'id'      => array('S' => $uuid),
-            'email'    => array('S' => $request->get('email')),
-            'referralCount'   => array('N' => 0),
-            'referralLink' => array('S' => "https://localfyi.com/subscribe/?" . $uuid)
-        );
-
-
-
-
-
-        if(isset($request['referral_id'])) {
-            
-
+        for($x = 0; $x < count($userData); $x++){
+         $email = $userData[$x]['email']['S'];
+         if($email == $request->get('email')){
+            return $this->sendError('User already exist'); 
+         }
         }
 
-       
+        $uuid = Str::uuid()->toString(); 
+        $email = $request->get('email');
 
+
+        try{
+
+            $tableName = 'Users';
+            $item =  array(
+                'id'      =>strval($uuid),
+                'referralCount'   => 0,
+                'email'    => strval($email),
+                'referralLink' => strval("https://localfyi.com/subscribe/?" . $uuid)
+            );
+
+            $dynamoDbModel = new Register;
+            $result = $dynamoDbModel->putItem($tableName, $item);
+
+            if(isset($request['referral_id'])) {
+                for($x = 0; $x < count($userData); $x++){
+                    $id = $userData[$x]['id']['S'];
+                    if($id == $request->get('referral_id')){
+                        $referrals  = array();  
+                        if(isset($userData[$x]['referrals'])){
+                            $referrals  = $userData[$x]['referrals'];
+                        }
+                        $tableName = 'Users';
+                        $item =  array(
+                            'id'      =>strval($id),
+                            'referralCount'   => (int) $userData[$x]['referralCount']['N'] + 1,
+                            'email'    => strval($userData[$x]['email']['S']),
+                            'referralLink' => strval($userData[$x]['referralLink']['S']),
+                            'referrals' => $referrals
+                        );
+                        $dynamoDbModel = new Register;
+                        $result = $dynamoDbModel->putItem($tableName, $item);
+
+                    }
+                }
+            }
+            return $this->sendResponse($email, 'User addedd successfully.');
+        }
+        catch(\Exception $e){
+            return $this->sendError('Something went wrong. '); 
+        }
     }
 }

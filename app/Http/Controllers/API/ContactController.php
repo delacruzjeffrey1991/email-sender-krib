@@ -265,7 +265,7 @@ class ContactController extends BaseController
                         ],
                     ],
                 ],
-                'FromEmailAddress' => 'roy@localfyi.com',
+                'FromEmailAddress' => 'community@localfyi.com',
                 'Destination' => [
                     'ToAddresses' => [$email],
                 ]

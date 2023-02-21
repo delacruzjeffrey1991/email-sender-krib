@@ -24,7 +24,30 @@ class Register extends Marshaler
         //     'version' => 'latest'
         // ]);
     }
+    
 
+    // public function updateItem($tableName, $email){
+
+    //     $key = $marshaler->marshalJson('                                               
+    //         {                                                                          
+    //             "email" : "'.$email.'"
+    //         }                                                                          
+    //     ');
+
+
+    //     $params = [
+    //         'TableName' => $tableName,
+    //         'Key' => $key,
+    //         'ExpressionAttributeValues' => $eav,
+    //         'UpdateExpression' => 'SET RequestedDelivery = :RequestedDelivery',
+    //         'ReturnValues' => 'UPDATED_NEW'
+    //    ];
+
+
+    //    return $this->dynamoDbClient->updateItem($params);
+
+
+    // }
     public function putItem($tableName, $item)
     {
         $marshaler = $this;
