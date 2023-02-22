@@ -8,6 +8,7 @@ use App\Http\Controllers\API\EmailController;
 use App\Http\Controllers\Backend\EmailApprovalsController;
 use App\Http\Controllers\API\ContactController;
 use App\Http\Controllers\API\EventController;
+use App\Http\Controllers\API\ItineraryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,8 @@ Route::post('subscribe', [RegisterController::class, 'registerNewreferral']);
 
 Route::get('event-list', [EventController::class, 'getEvents']);
 Route::post('event', [EventController::class, 'insertData']);
+
+
+Route::post('itirenary', [ItineraryController::class, 'insertData']);
 
 
