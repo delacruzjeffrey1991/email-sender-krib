@@ -249,6 +249,15 @@ class ContactController extends BaseController
             }
 
 
+            $params = array(
+                'contactList' => urlencode($request->get('contact_list_name')), 
+                'email' => urlencode($email)
+            );
+    
+            $param = http_build_query($params);
+            $unsubsurl = env('APP_URL') . '/unsubscribe' . "?" . $param;
+
+
             $this->sesV2Client()->sendEmail([
                 'ConfigurationSetName' => 'send_EmailListener',
                 'Content' => [
@@ -256,7 +265,7 @@ class ContactController extends BaseController
                         'Body' => [
                             'Text' => [
                                 'Charset' => 'UTF-8',
-                                'Data' => 'Welcome at localFYI.com',
+                                'Data' => 'Welcome at localFYI.com to unsubscribe click here ' .$unsubsurl,
                             ],
                         ],
                         'Subject' => [

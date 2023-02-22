@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\FrontPagesController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\API\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,5 @@ use Illuminate\Support\Facades\Auth;
 */
 Auth::routes();
 Route::get( '/', [ FrontPagesController::class, 'index' ] )->name( 'index' );
+Route::get('register-confirmation',[RegisterController::class, 'saveNewreferral']);
+Route::get('unsubscribe', [RegisterController::class, 'unsubscribe']);
