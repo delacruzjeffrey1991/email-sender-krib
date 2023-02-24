@@ -127,7 +127,6 @@ class RegisterController extends BaseController
             $tableName = 'Users';
             $item =  array(
                 'id'      =>strval($uuid),
-                'referralCount'   => 0,
                 'email'    => strval($email),
                 'referralLink' => strval("https://localfyi.com/subscribe/?" . $uuid)
             );
@@ -145,23 +144,51 @@ class RegisterController extends BaseController
 
                 for($x = 0; $x < count($userData); $x++){
                     $id = $userData[$x]['id']['S'];
-                    if($id == $request->get('referral_id')){
-                        $referrals  = array();  
-                        if(isset($userData[$x]['referrals'])){
-                            $referrals  = $userData[$x]['referrals'];
-                        }
 
-                        array_push($referrals, $request['referral_id']);
-                        $tableName = 'Users';
+                    if($id == $request->get('referral_id')){
+                        $tableName = 'Referral';
                         $item =  array(
-                            'id'      =>strval($id),
-                            'referralCount'   => (int) $userData[$x]['referralCount']['N'] + 1,
-                            'email'    => strval($userData[$x]['email']['S']),
-                            'referralLink' => strval($userData[$x]['referralLink']['S']),
-                            'referrals' => $referrals
+                            'referrer'      =>$request['referral_id'],
+                            'referee'   =>strval($uuid),
+                            'created_at'    => strval(date("Y-m-d H:i:s")),
+                            'updated_at' => strval(date("Y-m-d H:i:s"))
                         );
                         $dynamoDbModel = new Register;
                         $result = $dynamoDbModel->putItem($tableName, $item);
+
+                        // $referrals = [];
+                        // $referrals[0] = array('S' => $request['referral_id']);
+                        // if(isset($userData[$x]['referrals'])){
+                        //     $upto = count($userData[$x]['referrals']['SS']);
+                        //     for($a=0; $a<$upto; $a++){
+                        //         $referrals[$a] = array('S', $userData[$x]['referrals']['SS'][$a]);
+                        //     }
+                        //     $referrals[$upto - 1] = array("S",  $request['referral_id']);
+                        // }
+                        // print_r($referrals);
+                        // $dynamoDbModel = new Register;
+                        // $params = array(
+                        //     'TableName' => 'Users',
+                        //     'Key' => array(
+                        //                 "email" => 
+                        //                     array( 'S' => strval($userData[$x]['email']['S']))
+                        //             ),
+                        //     'UpdateExpression' => "set #attrrf=:rf, #attrrc =:rc",
+                        //     'ExpressionAttributeValues' => array(
+                        //             ':rf' => 
+                        //                 array( 'M' => $referrals)
+                        //             ,
+                        //             ':rc' =>
+                        //                 array( 'N' => strval((int) $userData[$x]['referralCount']['N'] + 1))
+                        //         ),
+                        //     'ExpressionAttributeNames' => array(
+                        //             '#attrrf' => "referrals",
+                        //             '#attrrc' =>"referralCount"
+                        //     ),
+                        //     "ReturnValues" => "ALL NEW"
+                        // );
+                        // $result = $dynamoDbModel->updateItem($params);
+                        // var_dump($result);
                     }
                 }
             }
@@ -282,4 +309,5 @@ class RegisterController extends BaseController
 
         return $this->sendResponse($email, 'Confirmation email sent');
     }
+
 }

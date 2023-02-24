@@ -363,9 +363,5 @@ class ContactController extends BaseController
              return $this->sendError(' Failed.' , $e->getMessage());
         }     
     }
-    
 
-
-
-   
 }
