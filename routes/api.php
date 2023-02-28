@@ -8,7 +8,7 @@ use App\Http\Controllers\API\EmailController;
 use App\Http\Controllers\Backend\EmailApprovalsController;
 use App\Http\Controllers\API\ContactController;
 use App\Http\Controllers\API\EventController;
-use App\Http\Controllers\API\ItineraryController;
+use App\Http\Controllers\API\ReferralController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +41,7 @@ Route::post('contact', [ContactController::class, 'createContact']);
 Route::get('contact', [ContactController::class, 'getContact']);
 Route::get('contact/list', [ContactController::class, 'listContact']);
 Route::post('contact/add-contacts-topic', [ContactController::class, 'addContactsTopics']);
+Route::post('referral-dahboard', [ReferralController::class, 'getReferralData']);
 
 Route::post('subscribe', [RegisterController::class, 'registerNewreferral']);
 
@@ -49,8 +50,5 @@ Route::post('event', [EventController::class, 'insertData']);
 Route::post('event-upload', [EventController::class, 'uploadFile']);
 
 
-
-
-Route::post('itirenary', [ItineraryController::class, 'insertData']);
 
 
