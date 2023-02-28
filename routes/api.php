@@ -46,6 +46,9 @@ Route::post('subscribe', [RegisterController::class, 'registerNewreferral']);
 
 Route::get('event-list', [EventController::class, 'getEvents']);
 Route::post('event', [EventController::class, 'insertData']);
+Route::post('event-upload', [EventController::class, 'uploadFile']);
+
+
 
 
 Route::post('itirenary', [ItineraryController::class, 'insertData']);
