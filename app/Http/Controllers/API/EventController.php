@@ -21,15 +21,17 @@ class EventController extends BaseController
 
         $input = $request->all();
 
-        $file = $this->uploadFile($input['image']);
         $tableName = 'Events';
         $timestamp = time();
 
-        unset($input['image']);
+        if(isset($input['image'])) {
+            $file = $this->uploadFile($input['image']);
+            unset($input['image']);
+        }
 
         $item = [
             'event_id' => strval($timestamp),
-            'event_image' => $file,
+            'event_image' => isset($file) ? $file : "",
            ...$input
         ];
 
