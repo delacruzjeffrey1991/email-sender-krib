@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\EmailApprovalsController;
 use App\Http\Controllers\API\ContactController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\ReferralController;
+use App\Http\Controllers\API\DyanamoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,11 @@ Route::get('event-list', [EventController::class, 'getEvents']);
 Route::post('event', [EventController::class, 'insertData']);
 Route::post('event-upload', [EventController::class, 'uploadFile']);
 
+
+//Dyanamo DB
+
+Route::get('getCities', [DyanamoController::class, 'getCities']);
+Route::post('subscribeUser', [DyanamoController::class, 'subscribeUser']);
 
 
 
