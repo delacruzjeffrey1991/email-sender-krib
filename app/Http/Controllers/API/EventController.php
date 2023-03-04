@@ -10,6 +10,7 @@ use App\Models\Event;
 
 use Illuminate\Support\Facades\Storage;
 use Aws\S3\S3Client;
+use Illuminate\Support\Facades\Log;
 
 
 class EventController extends BaseController
@@ -53,9 +54,38 @@ class EventController extends BaseController
         $tableName = 'Events';
 
       
-        $result = $dynamoDbModel->getItem($tableName , $cityParam);
+        $result = $dynamoDbModel->getItem($tableName , $cityParam , $whenParam );
+
         
 
+        if(!empty($result) && !empty($when)){
+            $items = $result['Items'];
+            if(!empty($items)){
+               
+                $filteredItems = collect($items)->filter(function ($item )  use ($when) {
+                    $eventDate = strtotime($item['event_date']['S']);
+                    $eventTime = date('H', $eventDate);
+
+
+                    if($when == 'Morning'){
+
+                        return $eventTime >= 5 &&  $eventTime < 12;
+                    }else if($when == 'Afternoon'){
+                         return $eventTime >= 12 &&  $eventTime < 17;
+                    }else if($when == 'Evening'){
+                         return $eventTime >= 17 &&  $eventTime < 21;
+                    }else if($when == 'Night'){
+                         return $eventTime >= 21 ||  $eventTime < 5;
+                    }
+                    
+                })->values()->all();
+
+                $result['Items'] = $filteredItems;
+            }
+                 
+        }
+        
+        Log::info( $result['Items']);
         
 
 

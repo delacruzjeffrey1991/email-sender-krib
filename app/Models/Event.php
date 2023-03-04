@@ -3,6 +3,7 @@
 namespace App\Models;
 use \Aws\DynamoDb\Marshaler;
 use \Aws\DynamoDb\DynamoDbClient;
+use Illuminate\Support\Facades\Log;
 
 class Event extends Marshaler
 {
@@ -38,23 +39,53 @@ class Event extends Marshaler
     }
 
 
-    public function getItem($tableName , $city = null )
-    {
-        $params = [
-            'TableName' => $tableName,
+   public function getItem($tableName , $city = null , $when = null)
+{
+    $params = [
+        'TableName' => $tableName,
+    ];
+
+    if ($city !== null) {
+        $params['FilterExpression'] = '#city = :city';
+        $params['ExpressionAttributeNames'] = [
+            '#city' => 'city',
         ];
-
-        if ($city !== null) {
-            $params['FilterExpression'] = '#city = :city';
-            $params['ExpressionAttributeNames'] = [
-                '#city' => 'city',
-            ];
-            $params['ExpressionAttributeValues'] = [
-                ':city' => ['S' => $city],
-            ];
-        }
-
-        $scan_response = $this->dynamoDbClient->scan($params);
-        return $scan_response;
+        $params['ExpressionAttributeValues'] = [
+            ':city' => ['S' => $city],
+        ];
     }
+
+    // Add filter expression for event_date hour
+    // if ($when !== null) {
+    //     if($when == 'Morning'){
+    //         $eventDateStart = date('Y-m-d\T05:00:00\Z', strtotime('now'));
+    //          $eventDateEnd = date('Y-m-d\T12:00:00\Z', strtotime('now'));
+    //     }else if($when == 'Afternoon'){
+    //         $eventDateStart = date('Y-m-d\T12:00:00\Z', strtotime('now'));
+    //          $eventDateEnd = date('Y-m-d\T17:00:00\Z', strtotime('now'));
+    //     }else if($when == 'Evening'){
+    //         $eventDateStart = date('Y-m-d\T17:00:00\Z', strtotime('now'));
+    //          $eventDateEnd = date('Y-m-d\T21:00:00\Z', strtotime('now'));
+    //     }else if($when == 'Night'){
+    //         $eventDateStart = date('Y-m-d\T21:00:00\Z', strtotime('now'));
+    //          $eventDateEnd = date('Y-m-d\T05:00:00\Z', strtotime('+1 day'));
+    //     }
+
+    //     if (isset($params['FilterExpression'])) {
+    //         $params['FilterExpression'] .= ' AND ';
+    //     } else {
+    //         $params['FilterExpression'] = '';
+    //     }
+
+
+
+    //      $params['FilterExpression'] .= ' #event_date BETWEEN :start AND :end';
+    //       $params['ExpressionAttributeNames']['#event_date'] = 'event_date';
+    //     $params['ExpressionAttributeValues'][':start'] = ['S' => $eventDateStart];
+    //     $params['ExpressionAttributeValues'][':end'] = ['S' => $eventDateEnd];
+    // }
+
+    $scan_response = $this->dynamoDbClient->scan($params);
+    return $scan_response;
+}
 }
