@@ -46,7 +46,7 @@ Route::post('referral-dahboard', [ReferralController::class, 'getReferralData'])
 
 Route::post('subscribe', [RegisterController::class, 'registerNewreferral']);
 
-Route::get('event-list', [EventController::class, 'getEvents']);
+Route::get('event-list/{city?}/{when?}', [EventController::class, 'getEvents']);
 Route::post('event', [EventController::class, 'insertData']);
 Route::post('event-upload', [EventController::class, 'uploadFile']);
 

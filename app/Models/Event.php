@@ -38,11 +38,23 @@ class Event extends Marshaler
     }
 
 
-    public function getItem($tableName)
+    public function getItem($tableName , $city = null )
     {
-            $scan_response =  $this->dynamoDbClient->scan(array(
-                'TableName' => $tableName 
-            ));
+        $params = [
+            'TableName' => $tableName,
+        ];
+
+        if ($city !== null) {
+            $params['FilterExpression'] = '#city = :city';
+            $params['ExpressionAttributeNames'] = [
+                '#city' => 'city',
+            ];
+            $params['ExpressionAttributeValues'] = [
+                ':city' => ['S' => $city],
+            ];
+        }
+
+        $scan_response = $this->dynamoDbClient->scan($params);
         return $scan_response;
     }
 }

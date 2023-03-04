@@ -43,14 +43,21 @@ class EventController extends BaseController
     }
 
 
-    public function getEvents()
+    public function getEvents(Request $request, $city = null, $when = null)
     {
+
+        $cityParam = $request->input('city', $city);
+        $whenParam = $request->input('when', $when);
 
         $dynamoDbModel = new Event;
         $tableName = 'Events';
 
-        $result = $dynamoDbModel->getItem($tableName);
-        // code...
+      
+        $result = $dynamoDbModel->getItem($tableName , $cityParam);
+        
+
+        
+
 
         return $result['Items'];
     }
