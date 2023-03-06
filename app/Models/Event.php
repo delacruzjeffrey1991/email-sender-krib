@@ -45,7 +45,7 @@ class Event extends Marshaler
         'TableName' => $tableName,
     ];
 
-    if ($city !== null) {
+    if ($city !== null && $city !== 'Anywhere') {
         $params['FilterExpression'] = '#city = :city';
         $params['ExpressionAttributeNames'] = [
             '#city' => 'city',

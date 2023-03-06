@@ -54,21 +54,18 @@ class EventController extends BaseController
         $tableName = 'Events';
 
       
-        $result = $dynamoDbModel->getItem($tableName , $cityParam , $whenParam );
+        $result = $dynamoDbModel->getItem($tableName , $cityParam , $whenParam);
 
         
 
         if(!empty($result) && !empty($when)){
             $items = $result['Items'];
-            if(!empty($items)){
-               
+            if(!empty($items) && $when !== 'Anytime'){
                 $filteredItems = collect($items)->filter(function ($item )  use ($when) {
                     $eventDate = strtotime($item['event_date']['S']);
                     $eventTime = date('H', $eventDate);
 
-
                     if($when == 'Morning'){
-
                         return $eventTime >= 5 &&  $eventTime < 12;
                     }else if($when == 'Afternoon'){
                          return $eventTime >= 12 &&  $eventTime < 17;
@@ -77,18 +74,13 @@ class EventController extends BaseController
                     }else if($when == 'Night'){
                          return $eventTime >= 21 ||  $eventTime < 5;
                     }
-                    
                 })->values()->all();
-
                 $result['Items'] = $filteredItems;
             }
                  
         }
         
         Log::info( $result['Items']);
-        
-
-
         return $result['Items'];
     }
 
