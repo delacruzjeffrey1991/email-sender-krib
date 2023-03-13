@@ -24,6 +24,17 @@ class DyanamoController extends BaseController
         return $result['Items'];
     }
 
+    public function getBlogs()
+    {
+        $dynamoDbModel = new Dynamo;
+        $tableName = 'Blogs';
+
+        $result = $dynamoDbModel->getItem($tableName);
+
+        return $result['Items'];
+    }
+    
+
 
     public function subscribeUser(Request $request)
     {
