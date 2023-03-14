@@ -130,6 +130,7 @@ class RegisterController extends BaseController
 
             $tableName = 'Users';
             $item =  array(
+                
                 'id'      =>strval($uuid),
                 'email'    => strval($email),
                 'referralLink' => strval("https://localfyi.com/subscribe/" . $uuid), 
@@ -146,6 +147,7 @@ class RegisterController extends BaseController
                 $TableName = 'Users';
                 $result = $dynamoDbModel->scan($TableName);
                 $userData = $result -> get('Items');
+                $referralId = Str::uuid()->toString(); 
 
                 for($x = 0; $x < count($userData); $x++){
                     $id = $userData[$x]['id']['S'];
@@ -153,6 +155,7 @@ class RegisterController extends BaseController
                     if($id == $request->get('referral_id')){
                         $tableName = 'Referral';
                         $item =  array(
+                            'referral_id' => $referralId,
                             'referrer'      =>strval($referral_id),
                             'referee'   =>strval($uuid),
                             'created_at'    => strval(date("Y-m-d H:i:s")),

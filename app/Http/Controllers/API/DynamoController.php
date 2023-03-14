@@ -42,6 +42,7 @@ class DyanamoController extends BaseController
         $input = $request->all();
         $uuid = Str::uuid()->toString(); 
         $referralLink = strval("https://localfyi.com/subscribe/" . $uuid);
+        $uuid = Str::uuid()->toString(); 
 
         $tableName = 'Users';
         $item = [
