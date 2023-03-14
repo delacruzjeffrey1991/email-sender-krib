@@ -51,7 +51,6 @@ Route::post('event-upload', [EventController::class, 'uploadFile']);
 
 
 //Dyanamo DB
-
 Route::get('getCities', [DyanamoController::class, 'getCities']);
 Route::post('subscribeUser', [DyanamoController::class, 'subscribeUser']);
 Route::get('getBlogs', [DyanamoController::class, 'getBlogs']);

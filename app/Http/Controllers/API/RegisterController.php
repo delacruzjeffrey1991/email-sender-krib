@@ -120,7 +120,6 @@ class RegisterController extends BaseController
 
     public function saveNewreferral(Request $request){
 
-
         $email = urldecode($request->email);
         $uuid = urldecode($request->uuid);
         $referral_id = urldecode($request->referral_id);
@@ -203,6 +202,28 @@ class RegisterController extends BaseController
               </body>
             </html>
             EOT;
+
+
+            $this->sesV2Client()->sendEmail([
+                'Content' => [
+                    'Simple' => [
+                        'Body' => [
+                            'Text' => [
+                                'Charset' => 'UTF-8',
+                                'Data' => 'Welcome at localFYI.com',
+                            ],
+                        ],
+                        'Subject' => [
+                            'Charset' => 'UTF-8',
+                            'Data' => 'Confirmation',
+                        ],
+                    ],
+                ],
+                'FromEmailAddress' => 'community@localfyi.com',
+                'Destination' => [
+                    'ToAddresses' => [$email],
+                ]
+            ]);
 
             return response($html, 200)->header('Content-Type', 'text/html');
         }
