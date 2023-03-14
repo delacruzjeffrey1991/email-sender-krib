@@ -119,27 +119,33 @@ class RegisterController extends BaseController
 
 
     public function saveNewreferral(Request $request){
+
+
         $email = urldecode($request->email);
         $uuid = urldecode($request->uuid);
         $referral_id = urldecode($request->referral_id);
+        $referred = urldecode($request->referred); 
+        $city = urldecode($request->city);
+
         try{
 
             $tableName = 'Users';
             $item =  array(
                 'id'      =>strval($uuid),
                 'email'    => strval($email),
-                'referralLink' => strval("https://localfyi.com/subscribe/?" . $uuid)
+                'referralLink' => strval("https://localfyi.com/subscribe/" . $uuid), 
+                'city' => strval($city),
             );
 
+            //save this new user
             $dynamoDbModel = new Register;
             $result = $dynamoDbModel->putItem($tableName, $item);
 
-            if(isset($request['referral_id'])) {
+            if($referred) {
 
                 $dynamoDbModel = new Register;
                 $TableName = 'Users';
                 $result = $dynamoDbModel->scan($TableName);
-
                 $userData = $result -> get('Items');
 
                 for($x = 0; $x < count($userData); $x++){
@@ -148,47 +154,13 @@ class RegisterController extends BaseController
                     if($id == $request->get('referral_id')){
                         $tableName = 'Referral';
                         $item =  array(
-                            'referrer'      =>$request['referral_id'],
+                            'referrer'      =>strval($referral_id),
                             'referee'   =>strval($uuid),
                             'created_at'    => strval(date("Y-m-d H:i:s")),
                             'updated_at' => strval(date("Y-m-d H:i:s"))
                         );
                         $dynamoDbModel = new Register;
                         $result = $dynamoDbModel->putItem($tableName, $item);
-
-                        // $referrals = [];
-                        // $referrals[0] = array('S' => $request['referral_id']);
-                        // if(isset($userData[$x]['referrals'])){
-                        //     $upto = count($userData[$x]['referrals']['SS']);
-                        //     for($a=0; $a<$upto; $a++){
-                        //         $referrals[$a] = array('S', $userData[$x]['referrals']['SS'][$a]);
-                        //     }
-                        //     $referrals[$upto - 1] = array("S",  $request['referral_id']);
-                        // }
-                        // print_r($referrals);
-                        // $dynamoDbModel = new Register;
-                        // $params = array(
-                        //     'TableName' => 'Users',
-                        //     'Key' => array(
-                        //                 "email" => 
-                        //                     array( 'S' => strval($userData[$x]['email']['S']))
-                        //             ),
-                        //     'UpdateExpression' => "set #attrrf=:rf, #attrrc =:rc",
-                        //     'ExpressionAttributeValues' => array(
-                        //             ':rf' => 
-                        //                 array( 'M' => $referrals)
-                        //             ,
-                        //             ':rc' =>
-                        //                 array( 'N' => strval((int) $userData[$x]['referralCount']['N'] + 1))
-                        //         ),
-                        //     'ExpressionAttributeNames' => array(
-                        //             '#attrrf' => "referrals",
-                        //             '#attrrc' =>"referralCount"
-                        //     ),
-                        //     "ReturnValues" => "ALL NEW"
-                        // );
-                        // $result = $dynamoDbModel->updateItem($params);
-                        // var_dump($result);
                     }
                 }
             }
@@ -248,23 +220,18 @@ class RegisterController extends BaseController
     {
         $input = $request->all();
         $validator = Validator::make($input, [
-            // 'referral_id' => 'required',
             'email' => 'required',
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-        /* step 1 check if the email is already existing at the database
-           step 2 get the referrral id check if exist
-        */
 
+        // check if the user already exists
         $dynamoDbModel = new Register;
         $TableName = 'Users';
         $result = $dynamoDbModel->scan($TableName);
-
         $userData = $result -> get('Items');
-
         for($x = 0; $x < count($userData); $x++){
             $email = $userData[$x]['email']['S'];
             if($email == $request->get('email')){
@@ -275,12 +242,27 @@ class RegisterController extends BaseController
         $uuid = Str::uuid()->toString(); 
         $email = $request->get('email');
         $path = env('APP_URL') . "register-confirmation";
+        $city = $request->get('city');
+        $referral_id = $request->referral_id;
 
-        $params = array(
-            'email' => urlencode($email), 
-            'uuid' => urlencode($uuid),
-            'referral_id' => urlencode($request->referral_id)
-        );
+        if($referral_id){
+            $params = array(
+                'email' => urlencode($email), 
+                'uuid' => urlencode($uuid),
+                'referral_id' => urlencode($referral_id),
+                'city' => urlencode($city), 
+                'referred' => true,
+            );
+        }
+        else{
+            $params = array(
+                'email' => urlencode($email), 
+                'uuid' => urlencode($uuid),
+                'city' => urlencode($city), 
+                'referred' => false,
+            );
+        }
+
 
         $param = http_build_query($params);
         $uri = $path . "?" . $param;

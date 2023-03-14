@@ -34,6 +34,8 @@ class ReferralController extends BaseController
 
     public function getReferralData(Request $request){
 
+        var_dump($request);
+
         $user_id = urldecode($request->user_id);
 
 
