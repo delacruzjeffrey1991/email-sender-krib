@@ -22,7 +22,8 @@ class EventController extends BaseController
 
         $input = $request->all();
 
-        $tableName = 'Events';
+        // $tableName = 'Events';
+        $tableName = 'Submitted_Events';
         $timestamp = time();
 
         if(isset($input['image'])) {
