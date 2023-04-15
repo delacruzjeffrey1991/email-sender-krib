@@ -49,6 +49,8 @@ Route::get('event-list/{city?}/{when?}', [EventController::class, 'getEvents']);
 Route::post('event', [EventController::class, 'insertData']);
 Route::post('event-upload', [EventController::class, 'uploadFile']);
 
+Route::get('business-list', [EventController::class, 'getBusiness']);
+
 
 //Dyanamo DB
 Route::get('getCities', [DyanamoController::class, 'getCities']);

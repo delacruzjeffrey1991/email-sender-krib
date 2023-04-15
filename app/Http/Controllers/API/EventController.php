@@ -43,6 +43,21 @@ class EventController extends BaseController
 
         return $item;
     }
+    
+
+    public function getBusiness()
+    {
+        $dynamoDbModel = new Event;
+        $tableName = 'Business';
+
+      
+        $result = $dynamoDbModel->getItem($tableName);
+        
+        Log::info( $result['Items']);
+        return $result['Items'];
+    }
+
+
 
 
     public function getEvents(Request $request, $city = null, $when = null)
