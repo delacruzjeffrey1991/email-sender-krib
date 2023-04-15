@@ -34,6 +34,14 @@ class DyanamoController extends BaseController
         return $result['Items'];
     }
     
+    public function getSubscribeUser(Request $request, $userId = "") {
+        $dynamoDbModel = new Dynamo;
+        $tableName = 'Users';
+
+        $result = $dynamoDbModel->getItemById($tableName, $userId);
+
+       return $result['Items'];
+    }
 
 
     public function subscribeUser(Request $request)

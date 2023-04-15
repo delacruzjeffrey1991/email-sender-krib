@@ -45,4 +45,20 @@ class Dynamo extends Marshaler
             ));
         return $scan_response;
     }
+
+      public function getItemById($tableName, $userId)
+    {
+           $scan_response = $this->dynamoDbClient->scan([
+            'TableName' => $tableName,
+            'FilterExpression' => '#id = :userId', // Condition to filter by userId
+            'ExpressionAttributeNames' => [
+                '#id' => 'id' // Attribute name mapping for the condition
+            ],
+            'ExpressionAttributeValues' => [
+                ':userId' => ['S' => $userId] // Attribute value mapping for the condition
+            ]
+    ]);
+
+    return $scan_response;
+    }
 }
